@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 
 const userRoute = require("./routes/user.route");
+const jobRoute = require("./routes/job.route");
 
 
 
@@ -13,7 +14,7 @@ const userRoute = require("./routes/user.route");
 app.use(express.json());
 app.use(cors());
 
-
+app.use("/jobs", jobRoute);
 app.use("/user", userRoute);
 
 app.get("/", (req, res) => {

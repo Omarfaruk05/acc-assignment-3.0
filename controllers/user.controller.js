@@ -52,7 +52,7 @@ exports.login = async(req, res) =>{
 
         const token = genetateToken(user);
 
-        delete user.password;
+       delete user.password;
 
         res.status(200).json({
             status: 'Success',
