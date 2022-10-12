@@ -70,3 +70,20 @@ exports.login = async(req, res) =>{
         });
     }
 };
+
+exports.getMe = async(req, res) => {
+    try {
+       const user = await findUserByEmail(req.user?.email);
+
+       res.status(200).json({
+        status: 'Success',
+        data: user,
+       })
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            message: "logn is not successfull.",
+            error: error.message,
+        });
+    }
+}

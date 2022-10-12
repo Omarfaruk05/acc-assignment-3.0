@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
 
 const userSchema = mongoose.Schema(
     {
@@ -53,19 +54,16 @@ const userSchema = mongoose.Schema(
             minLength: [3, "Last name must be at least 3 characters."],
             maxLength: [100, "Last name is too large."],
         },
-        contactNumber: [
-            {
-              type: String,
-              required: true,
-              unique: true,
-              validate: {
+        contactNumber: {
+            type: String,
+            required: true,
+            validate: {
                 validator: (value) => {
-                  return validator.isMobilePhone(value);
+                    return validator.isMobilePhone(value);
                 },
                 message: "Please provide a valid phone number.",
-              },
             },
-        ],
+        },
         imageUrl: {
             type: String,
             validate: [validator.isURL, "Please provide a valide image URL."]
@@ -82,8 +80,7 @@ const userSchema = mongoose.Schema(
 userSchema.pre("save", function(next){
     const password = this.password;
 
-    const hashPass = bcrypt.hash(password, 10);
-    console.log(hashPass)
+    const hashPass = bcrypt.hashSync(password, 10);
 
     this.password = hashPass;
     this.confirmPassword = undefined;

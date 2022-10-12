@@ -1,9 +1,25 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { ObjectId } = mongoose.Schema.Types;
+
 
 
 const jobSchema = mongoose.Schema(
     {
+     applicant: {
+          email:{
+               type: String,
+               validator: [validator.isEmail, "Please provide a valide email"],
+               trim: true,
+               lowercase: true,
+               unique: [true, "You are already applied in this email."],
+               required: [true, "Email is required"]
+          },
+          id:{
+               type: ObjectId,
+               ref: "Application"
+          }
+     },
        title: {
             type: String,
             trim: true,
@@ -54,7 +70,10 @@ const jobSchema = mongoose.Schema(
       lastApplicationDate: {
         type: Date,
         default: Date.now() + (30*24*3600*1000),
-      }, 
+      },
+      createdBy: {
+          type: String,
+      } 
     },
     {
         timestamps: true,

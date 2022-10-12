@@ -5,8 +5,8 @@ exports.genetateToken = (userInfo) => {
         email: userInfo.email,
         role: userInfo.role,
     }
-    const token = jwt.sign(payload, process.env.TOKEN_SECTET, {
-        expiresIn:'1d'
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        expiresIn:'7days'
     });
 
     return token;
