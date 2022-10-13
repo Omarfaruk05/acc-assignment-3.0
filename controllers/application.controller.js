@@ -32,8 +32,7 @@ exports.createApplication = async(req, res) => {
             })
         }
 
-        const application = createApplicationService(id, req.body, email);
-        console.log(application)
+        const updatedJobFileds = createApplicationService(id, req.body, email);
         res.status(200).json({
             status:"Success",
             message: "Applied successfull.",
