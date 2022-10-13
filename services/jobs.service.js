@@ -5,8 +5,10 @@ exports.createJobsService = async(job) =>{
     return result;
 }
 
-exports.getJobsService = async() =>{
-    const result = Job.find({});
+exports.getJobsService = async(filters, queries) =>{
+    const result = Job.find(filters)
+        .sort(queries.sortBy)
+        .select(queries.fields);
     return result;
 }
 

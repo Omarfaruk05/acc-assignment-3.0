@@ -24,7 +24,28 @@ exports.createJobs = async(req, res) => {
 
 exports.findJobs = async(req, res) => {
     try {
-        const user = await getJobsService();
+        let filters={...req.query};
+        console.log(filters)
+        const queries = {};
+
+        if(req.query.sort){
+            const sortBy = req.query.sort.split(",").join(" ");
+            queries.sortBy = sortBy
+        };
+
+        if(req.query.fields){
+            const fields = req.query.fields.split(',').join(' ');
+            queries.fields = fields;
+        }
+        const excludesFields = ['sort', 'page', 'limit', 'fields'];
+        excludesFields.forEach(field => delete filters[field]);
+
+        let filterString = JSON.stringify(filters);
+        filterString = filterString.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
+
+        filters = JSON.parse(filterString);
+        
+        const user = await getJobsService(filters, queries);
 
         res.status(200).json({
             status: 'Success',
