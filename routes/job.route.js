@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jobsController = require("../controllers/jobs.controller");
+const applicationController = require ("../controllers/application.controller.js");
 const authorization = require('../middleware/authorization');
 const verifyToken = require('../middleware/verifyToken');
 
@@ -12,6 +13,10 @@ router.route("/")
 
 
 router.route("/:id")
+.get(jobsController.findCandidateJobById)
 .patch(verifyToken, authorization("hiring manager"), jobsController.updateJobs);
+
+router.route("/:id/apply")
+.post(verifyToken, authorization("candidate"), applicationController.createApplication);
 
 module.exports = router;

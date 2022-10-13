@@ -7,6 +7,9 @@ const verifyToken = require('../middleware/verifyToken');
 router.route("/")
 .get(verifyToken, authorization("hiring manager"), jobsController.findMangerJobs)
 
+router.route("/:id")
+.get(verifyToken, authorization("hiring manager"), jobsController.findMangerJobById)
+
 
 
 module.exports = router;

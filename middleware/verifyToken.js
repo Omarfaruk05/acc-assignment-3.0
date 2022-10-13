@@ -14,8 +14,10 @@ module.exports = async(req, res, next)=> {
         };
 
         const decoded = await promisify(jwt.verify)(token, process.env.TOKEN_SECRET);
+
+        const user = await User.findOne({email: decoded.email})
          
-        req.user = decoded;
+        req.user = user;
 
         next();
 

@@ -15,6 +15,16 @@ exports.getJobsByEmailService = async(email) =>{
     return result;
 }
 
+exports.getJobByIdService = async(id) =>{
+    const result = await Job.findOne({_id: id}).populate("applicantIds");
+    return result;
+}
+
+exports.getCandidateJobByIdService = async(id) =>{
+    const result = await Job.findOne({_id: id}).populate("creator");
+    return result;
+}
+
 exports.updateJobService = async(id, data) =>{
     const result = Job.updateOne({_id: id }, data, {runValidators: true});
     return result;

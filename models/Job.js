@@ -6,20 +6,14 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const jobSchema = mongoose.Schema(
     {
-     applicant: {
-          email:{
+     applicantEmails: [{
                type: String,
-               validator: [validator.isEmail, "Please provide a valide email"],
-               trim: true,
-               lowercase: true,
-               unique: [true, "You are already applied in this email."],
-               required: [true, "Email is required"]
-          },
-          id:{
-               type: ObjectId,
-               ref: "Application"
-          }
-     },
+               unique: [true, "You can apply one time with one account."]
+          }],
+     applicantIds:[{
+          type: ObjectId,
+          ref: "Application"
+     }],
        title: {
             type: String,
             trim: true,
@@ -73,6 +67,10 @@ const jobSchema = mongoose.Schema(
       },
       createdBy: {
           type: String,
+      },
+      creator: {
+          type: ObjectId,
+          ref: "User"
       } 
     },
     {

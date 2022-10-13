@@ -1,10 +1,11 @@
-const { createJobsService, getJobsService, getJobsByEmailService, updateJobService } = require("../services/jobs.service");
+const { createJobsService, getJobsService, getJobsByEmailService, updateJobService, getJobByIdService, getCandidateJobByIdService } = require("../services/jobs.service");
 
 exports.createJobs = async(req, res) => {
     try {
         const managerEmail = req.user.email;
-        console.log(managerEmail);
-        const job = {...req.body, createdBy:managerEmail}
+        const managerId = req.user._id;
+        console.log(managerId);
+        const job = {...req.body, createdBy:managerEmail, creator:managerId}
         const user = await createJobsService(job);
 
         res.status(200).json({
@@ -42,17 +43,66 @@ exports.findJobs = async(req, res) => {
 exports.findMangerJobs = async(req, res) => {
     try {
         const email = req.user.email;
-        const user = await getJobsByEmailService(email);
+        const job = await getJobsByEmailService(email);
 
         res.status(200).json({
             status: 'Success',
             message:'Successfully get jobs.',
-            data: user,
+            data: job,
         });
     } catch (error) {
         res.status(400).json({
             status: "Fail",
             message: "Successfully doesn't get jobs.",
+            error: error.message,
+        });
+    }
+}
+
+exports.findMangerJobById = async(req, res) => {
+    try {
+        const {id}= req.params;
+        const job = await getJobByIdService(id);
+        if(!job){
+            return res.status(403).json({
+                status: "Fail",
+                error: "There has no job in this id."
+            })
+        }
+
+        res.status(200).json({
+            status: 'Success',
+            message:'Successfully get job by id.',
+            data: job,
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            message: "Doesn't get job by id.",
+            error: error.message,
+        });
+    }
+}
+exports.findCandidateJobById = async(req, res) => {
+    try {
+        const {id}= req.params;
+        const job = await getCandidateJobByIdService(id);
+        if(!job){
+            return res.status(403).json({
+                status: "Fail",
+                error: "There has no job in this id."
+            })
+        }
+
+        res.status(200).json({
+            status: 'Success',
+            message:'Successfully get job by id.',
+            data: job,
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "Fail",
+            message: "Doesn't get job by id.",
             error: error.message,
         });
     }
